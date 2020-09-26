@@ -151,8 +151,9 @@ RD2 = WHK2/WHK_eff
 RD3 = WHK3/WHK_eff
 
 RD = [RD1, RD2, RD3]
+RD_f = ["%0.2f" %elem for elem in RD]
 
-df4 = pd.DataFrame({"Relative Discharge [-]": RD}, index= index)
+df4 = pd.DataFrame({"Relative Discharge [-]": RD_f}, index= index)
 
 
 if st.checkbox("Show results: Flow parallel to the layer"):
