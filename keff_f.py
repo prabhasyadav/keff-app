@@ -12,7 +12,7 @@ st.header("Hydraulic conductivity of layered aquifers")
 st.markdown("The site can be used to calculate the effective hydraulic conductivity of the layered aquifers." )
 
 
-st.markdown("You steps for calculations are:\n \n1. Input layer thickness and conductivity data in the boxes in the sidebar\n 2. Check the boxes to see the results  ",  unsafe_allow_html=True)
+st.markdown("Calculations steps are:\n \n1. Input layer thickness and conductivity data in the boxes in the sidebar\n 2. Check the boxes to see the results  ",  unsafe_allow_html=True)
 st.text("") # to add free space
 
 st.warning("Make sure to be consistent with the UNITS of input data")
