@@ -5,6 +5,7 @@ import pandas as pd
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["font.size"] = 10
 
+st.beta_set_page_config(page_icon="potable_water")
 
 st.header("Hydraulic conductivity of layered aquifers")
 
