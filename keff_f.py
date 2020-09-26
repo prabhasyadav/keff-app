@@ -182,7 +182,7 @@ if st.checkbox("Show results: Flow parallel to the layer"):
 
 About = st.sidebar.checkbox("About App")
 if About:
-    st.sidebar.markdown("Add created by PKY")
+    st.sidebar.markdown("App created by PKY")
     st.sidebar.markdown("App created using Streamlit")
 else:
     st.sidebar.text(" ")
