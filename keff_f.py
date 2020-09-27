@@ -1,18 +1,18 @@
 import streamlit as st
-import matplotlib.pyplot as plt 
 import numpy as np 
 import pandas as pd
-plt.rcParams["font.weight"] = "bold"
-plt.rcParams["font.size"] = 10
+from bokeh.plotting import figure
+from bokeh.models import Span, Range1d
+
 
 st.beta_set_page_config(page_icon="potable_water")
 
-st.header("Hydraulic conductivity of layered aquifers")
+st.header("**Hydraulic conductivity of layered aquifers**")
 
 st.markdown("The site can be used to calculate the effective hydraulic conductivity of the layered aquifers." )
 
 
-st.markdown("Calculations steps are:\n \n1. Input layer thickness and conductivity data in the boxes in the sidebar\n 2. Check the boxes to see the results  ",  unsafe_allow_html=True)
+st.markdown("You steps for calculations are:\n \n1. Input layer thickness and conductivity data in the boxes in the sidebar\n 2. Check the boxes to see the results  ",  unsafe_allow_html=True)
 st.text("") # to add free space
 
 st.warning("Make sure to be consistent with the UNITS of input data")
@@ -105,27 +105,42 @@ if st.checkbox("Show results: Flow perpendicular to layer"):
     st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(HC_eff), "m/s")
     
     #plot
-     
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    ax.set_xlim(0, 1.01); ax.set_ylim(0,1.01)
-    ax.xaxis.set_ticks_position('top') 
-    ax.xaxis.set_label_position('top') 
-    ax.set_xlabel("Relative head [-]", fontsize=12)  
-    ax.set_ylabel("Relative thickness [-]", fontsize=12)  
-    plt.gca().invert_yaxis()
-    ax.spines['right'].set_visible(False)
-    ax.spines['bottom'].set_visible(False)
-    
-    ax.axhline(y=0, color='r', linewidth=2)
-    ax.axhline(y=RT2, color='r', linewidth=2)
-    ax.axhline(y=RT3, color='r', linewidth=2)
-    ax.axhline(y=RT4, color='r', linewidth=2)
-    ax.plot(RH, RT)
 
-    plt.xticks(np.arange(0, 1.1, 0.1))
-    plt.yticks(np.arange(0, 1.1, 0.1))
-    st.pyplot(fig)
+    TOOLS = "save,pan,box_zoom,reset,wheel_zoom, crosshair"
+
+    p = figure(
+    x_axis_label='Relative head [-]',
+    y_axis_label='Relative thickness [-]',
+    plot_width=350, 
+    plot_height=400,
+    x_axis_location="above",
+    tools = TOOLS)
+
+    p.y_range.flipped = True
+    p.line(RH, RT, line_width=2 )
+    sp1 = Span(location=0, dimension='width', line_color='red', line_width=4)
+    sp2 = Span(location=RT2, dimension='width', line_color='red', line_width=2)
+    sp3 = Span(location=RT3, dimension='width', line_color='red', line_width=2)
+    sp4 = Span(location=RT4, dimension='width', line_color='red', line_width=2)
+
+    p.add_layout(sp1)
+    p.add_layout(sp2)
+    p.add_layout(sp3)
+    p.add_layout(sp4)
+    p.y_range = Range1d(1.01, 0)
+    p.x_range = Range1d(0, 1.02)
+    p.xaxis.axis_label_text_font_size = "10pt"
+    p.axis.axis_label_text_font_style = 'bold'
+    p.yaxis.major_label_text_font_size = "10pt"
+    p.xaxis.major_label_text_font_size = "10pt"
+    p.xaxis.major_label_text_font_style = 'bold'
+    p.yaxis.major_label_text_font_style = 'bold'
+
+    yticks = np.arange(0,1.1, 0.1)
+    p.yaxis.ticker = yticks
+    p.xaxis.ticker = yticks
+
+    st.bokeh_chart(p, use_container_width=False)
 
     if st.checkbox("Show additional results"):
 
@@ -151,23 +166,29 @@ RD2 = WHK2/WHK_eff
 RD3 = WHK3/WHK_eff
 
 RD = [RD1, RD2, RD3]
-RD_f = ["%0.2f" %elem for elem in RD]
 
-df4 = pd.DataFrame({"Relative Discharge [-]": RD_f}, index= index)
+df4 = pd.DataFrame({"Relative Discharge [-]": RD}, index= index)
 
 
 if st.checkbox("Show results: Flow parallel to the layer"):
 
     st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "s/m")
-    fig2 = plt.figure()
-    plt.gca().invert_yaxis()
-    ay = fig2.add_subplot(1,1,1)
-    ay.barh(index, RD) 
-    plt.xticks(np.arange(0, 1.1, 0.1))
-    ay.set_xlabel("Relative discharge [-]", fontsize=12)
-    ay.set_xlabel("Layer number", fontsize=12)
- 
-    st.pyplot(fig2)
+    
+    p2 = figure(y_range = index, plot_height = 250) # makes figure
+    p2.hbar(y=index, right= RD, height = 0.5) # plots bar graph
+
+    #customizing chart
+    yticks = np.arange(0,1.1, 0.1)
+    p2.xaxis.ticker = yticks
+    p2.xaxis.axis_label_text_font_size = "10pt"
+    p2.axis.axis_label_text_font_style = 'bold'
+    p2.xaxis.major_label_text_font_size = "10pt"
+    p2.xaxis.major_label_text_font_style = 'bold'
+    p2.yaxis.major_label_text_font_size = "10pt"
+    p2.yaxis.major_label_text_font_style = 'bold'
+
+    # figure to website.
+    st.bokeh_chart(p2, use_container_width=False)
 
     if st.checkbox("show additional results"):
     
@@ -184,7 +205,6 @@ if st.checkbox("Show results: Flow parallel to the layer"):
 About = st.sidebar.checkbox("About App")
 if About:
     st.sidebar.markdown("App created by PKY")
-    st.sidebar.markdown("App created using Streamlit")
+    st.sidebar.markdown("App created using [Streamlit](www.streamlit.io)")
 else:
     st.sidebar.text(" ")
-
