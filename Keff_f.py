@@ -5,6 +5,7 @@ import pandas as pd
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["font.size"] = 10
 
+st.beta_set_page_config(page_icon="potable_water")
 
 st.header("**Hydraulic conductivity of layered aquifers**")
 
@@ -97,7 +98,7 @@ df3 = {"Relative Thickness [-]": RT_f, "Relative Head [-]": RH_f}
 st.markdown("### Results")
 
 
-if st.checkbox("Show results: Flow perpendicular to the layers"):
+if st.checkbox("Show results: Flow perpendicular to layer"):
 
     # results text
 
@@ -154,7 +155,7 @@ RD = [RD1, RD2, RD3]
 df4 = pd.DataFrame({"Relative Discharge [-]": RD}, index= index)
 
 
-if st.checkbox("Show results: Flow parallel to the layers"):
+if st.checkbox("Show results: Flow parallel to the layer"):
 
     st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "s/m")
     fig2 = plt.figure()
@@ -167,7 +168,7 @@ if st.checkbox("Show results: Flow parallel to the layers"):
  
     st.pyplot(fig2)
 
-    if st.checkbox("Show additional results"):
+    if st.checkbox("show additional results"):
     
 
         st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "s/m")
@@ -182,7 +183,6 @@ if st.checkbox("Show results: Flow parallel to the layers"):
 About = st.sidebar.checkbox("About App")
 if About:
     st.sidebar.markdown("App created by PKY")
-    st.sidebar.markdown("App created using [Streamlit](www.streamlit.io)")
+    st.sidebar.markdown("App created using Streamlit")
 else:
     st.sidebar.text(" ")
-
