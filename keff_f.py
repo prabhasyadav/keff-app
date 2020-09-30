@@ -164,7 +164,7 @@ if st.checkbox("Show results: Flow parallel to the layer"):
     ay.barh(index, RD) 
     plt.xticks(np.arange(0, 1.1, 0.1))
     ay.set_xlabel("Relative discharge [-]", fontsize=12)
-    ay.set_xlabel("Layer number", fontsize=12)
+    ay.set_ylabel("Layer number", fontsize=12)
  
     st.pyplot(fig2)
 
