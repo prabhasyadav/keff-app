@@ -168,7 +168,7 @@ ay = fig2.add_subplot(1,1,1)
 ay.barh(index, RD) 
 plt.xticks(np.arange(0, 1.1, 0.1))
 ay.set_xlabel("Relative discharge [-]", fontsize=12)
-ay.set_xlabel("Layer number", fontsize=12)
+ay.set_ylabel("Layer number", fontsize=12)
 col2.pyplot(fig2)
 
 with col2:
