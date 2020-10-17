@@ -5,9 +5,10 @@ import pandas as pd
 plt.rcParams["font.weight"] = "bold"
 plt.rcParams["font.size"] = 10
 
-st.beta_set_page_config(page_icon="potable_water")
+st.beta_set_page_config(layout="wide")
 
-st.header("**Hydraulic conductivity of layered aquifers**")
+
+st.header("Hydraulic conductivity of layered aquifers")
 
 st.markdown("The site can be used to calculate the effective hydraulic conductivity of the layered aquifers." )
 
@@ -97,46 +98,46 @@ df3 = {"Relative Thickness [-]": RT_f, "Relative Head [-]": RH_f}
 
 st.markdown("### Results")
 
+# make layout
+col1, col2 = st.beta_columns(2)
 
-if st.checkbox("Show results: Flow perpendicular to layer"):
+col1.success("**Flow parallel to layers**")
 
-    # results text
-
+with col1:
     st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(HC_eff), "m/s")
+
+fig1 = plt.figure()
+ax = fig1.add_subplot(1,1,1)
+ax.set_xlim(0, 1.01); ax.set_ylim(0,1.01)
+ax.xaxis.set_ticks_position('top') 
+ax.xaxis.set_label_position('top') 
+ax.set_xlabel("Relative head [-]", fontsize=12)  
+ax.set_ylabel("Relative thickness [-]", fontsize=12)  
+plt.gca().invert_yaxis()
+ax.spines['right'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
     
-    #plot
-     
-    fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    ax.set_xlim(0, 1.01); ax.set_ylim(0,1.01)
-    ax.xaxis.set_ticks_position('top') 
-    ax.xaxis.set_label_position('top') 
-    ax.set_xlabel("Relative head [-]", fontsize=12)  
-    ax.set_ylabel("Relative thickness [-]", fontsize=12)  
-    plt.gca().invert_yaxis()
-    ax.spines['right'].set_visible(False)
-    ax.spines['bottom'].set_visible(False)
-    
-    ax.axhline(y=0, color='r', linewidth=2)
-    ax.axhline(y=RT2, color='r', linewidth=2)
-    ax.axhline(y=RT3, color='r', linewidth=2)
-    ax.axhline(y=RT4, color='r', linewidth=2)
-    ax.plot(RH, RT)
+ax.axhline(y=0, color='r', linewidth=2)
+ax.axhline(y=RT2, color='r', linewidth=2)
+ax.axhline(y=RT3, color='r', linewidth=2)
+ax.axhline(y=RT4, color='r', linewidth=2)
+ax.plot(RH, RT)
 
-    plt.xticks(np.arange(0, 1.1, 0.1))
-    plt.yticks(np.arange(0, 1.1, 0.1))
-    st.pyplot(fig)
+plt.xticks(np.arange(0, 1.1, 0.1))
+plt.yticks(np.arange(0, 1.1, 0.1))
 
-    if st.checkbox("Show additional results"):
+col1.pyplot(fig1)
 
+with col1:
+    if st.checkbox("Show additional results:Parallel Case"):
         st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(HC_eff), "m/s")
         st.write("The **Approximate Effective Hydraulic Conductivity** is: {0:0.2e}".format(HC_eff_a), "m/s")
         st.write("The **Effective Hydraulic Resistance** is: {0:0.2e}".format(HR_eff), "s/m")
         st.write("The **Approximate Effective Hydraulic Resistance** is {0:0.2e}".format(HR_eff_a), "s/m")
 
-
-            #result table
-        st.dataframe(df3)
+        with col1:
+            if st.checkbox("Show results table: Parallel Case"):
+                st.dataframe(df3)
 
 
 # results perpendicular flow
@@ -155,34 +156,37 @@ RD = [RD1, RD2, RD3]
 df4 = pd.DataFrame({"Relative Discharge [-]": RD}, index= index)
 
 
-if st.checkbox("Show results: Flow parallel to the layer"):
+col2.success("**Flow perpendicular to layers**")
 
-    st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "s/m")
-    fig2 = plt.figure()
-    plt.gca().invert_yaxis()
-    ay = fig2.add_subplot(1,1,1)
-    ay.barh(index, RD) 
-    plt.xticks(np.arange(0, 1.1, 0.1))
-    ay.set_xlabel("Relative discharge [-]", fontsize=12)
-    ay.set_ylabel("Layer number", fontsize=12)
- 
-    st.pyplot(fig2)
+with col2:
+    st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "m/s")
 
-    if st.checkbox("show additional results"):
+
+fig2 = plt.figure()
+plt.gca().invert_yaxis()
+ay = fig2.add_subplot(1,1,1)
+ay.barh(index, RD) 
+plt.xticks(np.arange(0, 1.1, 0.1))
+ay.set_xlabel("Relative discharge [-]", fontsize=12)
+ay.set_xlabel("Layer number", fontsize=12)
+col2.pyplot(fig2)
+
+with col2:
+    if st.checkbox("Show additional results: Perpendicular Case"):
     
+        st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "m/s")
+        st.write("The **Approximate Effective Hydraulic Conductivity** is {0:0.2e}".format(WHK_eff_a), "m/s")
+        st.write("The **Effective Hydraulic Resistance** is: {0:0.2e}".format(WHR_eff), "s/m")
+        st.write("The **Approximate Effective Hydraulic Resistance** is: {0:0.2e}".format(WHR_eff_a), "s/m")
 
-        st.write("The **Effective Hydraulic Conductivity** is: {0:0.2e}".format(WHK_eff), "s/m")
-        st.write("The **Approximate Effective Hydraulic Conductivity** is {0:0.2e}".format(WHK_eff_a), "s/m")
-        st.write("The **Effective Hydraulic Resistance** is: {0:0.2e}".format(WHR_eff), "m/s")
-        st.write("The **Approximate Effective Hydraulic Resistance** is: {0:0.2e}".format(WHR_eff_a), "m/s")
+        with col2:
+            if st.checkbox("Show results table: Perpendicular Case"):
+                st.dataframe(df4)
     
-        #result table
-        st.dataframe(df4)
-
 
 About = st.sidebar.checkbox("About App")
 if About:
-    st.sidebar.markdown("App created by PKY")
+    st.sidebar.markdown("Add created by PKY")
     st.sidebar.markdown("App created using Streamlit")
 else:
     st.sidebar.text(" ")
