@@ -18,15 +18,20 @@ st.text("") # to add free space
 
 st.warning("Make sure to be consistent with the UNITS of input data")
 
-st.sidebar.header("The input data")
+# make layout
 
-M1 = st.sidebar.number_input("Thickness Layer 1 (m):", value =1.0, step=0.1)
-M2 = st.sidebar.number_input("Thickness Layer 2 (m):",value = 2.0, step=0.1)
-M3 = st.sidebar.number_input("Thickness Layer 3 (m):",value = 3.0, step=0.1)
-    
-K1 = st.sidebar.number_input("Hydraulic Conductivity Layer 1 (m/s):", value=2e-2, format='%e')
-K2 = st.sidebar.number_input("Hydraulic Conductivity Layer 2 (m/s):", value=2e-3, format='%e')
-K3 = st.sidebar.number_input("Hydraulic Conductivity Layer 3 (m/s):", value=2e-4, format='%e')
+st.subheader("The input data")
+col_d1, col_d2 = st.beta_columns(2)
+
+with col_d1:
+    M1 = st.number_input("Thickness Layer 1 (m):", value =1.0, step=0.5)
+    M2 = st.number_input("Thickness Layer 2 (m):",value = 2.0, step=0.5)
+    M3 = st.number_input("Thickness Layer 3 (m):",value = 3.0, step=0.5)
+
+with col_d2:    
+    K1 = st.number_input("Hydraulic Conductivity Layer 1 (m/s):", value=2e-2,step=0.2, format='%f')
+    K2 = st.number_input("Hydraulic Conductivity Layer 2 (m/s):", value=2e-3, format='%f')
+    K3 = st.number_input("Hydraulic Conductivity Layer 3 (m/s):", value=2e-4, format='%f')
 
 K = [K1, K2, K3]
 K_f = ["%0.2e" %elem for elem in K]
@@ -184,9 +189,9 @@ with col2:
                 st.dataframe(df4)
     
 
-About = st.sidebar.checkbox("About App")
+About = st.checkbox("About App")
 if About:
-    st.sidebar.markdown("Add created by PKY")
-    st.sidebar.markdown("App created using Streamlit")
+    st.markdown("Add created by PKY")
+    st.markdown("App created using Streamlit")
 else:
-    st.sidebar.text(" ")
+    st.text(" ")
